@@ -1,0 +1,12 @@
+create a class library in the same asp.net mvc solution. name it : Books.entities - delete the auto added class. 
+- create a class "Model" in the class libray name it Book - add data annotations in the class libray project- right click on the class library project
+- and click add reference - search dataannotations and mark it - click ok.
+
+-- now adding Context classes for sql database
+-- add DataContexts folder to the asp.net mvc web project
+ -- create a class named BooksDb extending DbContext cLASS in DataContexts folder . it will contain the DbSet of the Book class
+-- create a new class in the DataContext folder and name it IdentityDb
+-- copy the class from the IdentityModel.cs class located in the Model directory 
+-- and paste it into the newly created IdentityDb class then extend the class by IdentityDb instead of ApplicationDb
+-- and paste the context 
+ 

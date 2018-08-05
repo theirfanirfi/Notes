@@ -1,0 +1,147 @@
+python django migrate
+
+
+///////////////////////////////////
+
+in models
+
+class Album(models.Model):
+	artist = models.CharField(max_length=250) 
+
+
+class Song(models.Model):
+	album = models.ForeignKey(Album, on_delete=models.CASCADE)
+
+
+////REGISTER APP in the settings of the site
+mysite->settings.py->INSTALLED_APPS = [
+music.apps.MusicConfig  -< this name will be located in MucisApp folder file apps.py
+
+]
+
+after creating models and registering app, active models through command line
+sitedirectory> python manage.py makemigrations appName
+
+
+
+
+/// checking the migrations
+
+sitedirectory> python manage.py sqlmigrate music [recentmigrationid]
+
+//it will show all the details .. migrations is just a change to your database
+
+//no run the migrations
+
+sitedirectory>python manage.py migrate
+
+// if it any time you made changes in the models of an app, just run the following two lines.
+sitedirectory> python manage.py makemigrations appName
+sitedirectory> python manage.py migrate
+
+
+////////////////////////////////////
+
+
+Database API
+
+> python manage.py shell
+## a python shell will be opened for database
+##now import your models in the shell
+> from posts.model import Post
+##fetching all items from the Post
+>> Post.objects.all()
+##insertion
+>> a = Post(post_title="sometile",post_description="some description")
+>> a.save()
+##the above record will be inserted
+## we can print a record artibute
+>> a.post_title
+##printing primary key
+>>a.pk
+>>a.id
+
+## we can insert a record by the following method too
+
+>> b = Post()
+>> b.post_title = "this is another title"
+>> b.post_description = "this is another description"
+>> b.save()
+
+### filterng database results
+
+##geting object by id
+>>Post.objects.filter(id=1)
+## by columns other than pk
+>> Post.objects.filter(post_title__startswith='some')
+
+## creating admin superuser
+>> python manage.py createsuperuser
+##>> fill the details
+
+############################# registering your models and displaying into admin
+
+## goto app folder -> admin.py and import the classes from models like
+
+from .models import Post
+admin.site.register(Post)
+
+########### passing parameters in the url
+
+url(r'^(?P<post_id>[0-9]+)/$', views.checkParam, name="checkParam")
+
+### the following is the view function
+
+def checkParam(request, post_id):
+    return HttpResponse("this is the id: "+str(post_id))
+
+
+################ templates
+## in view.py
+from django.template import loader
+
+def index(request):
+	template = loader.get_template('templatename')
+	all_posts = Post.objects.all()
+	context = {
+	'all_posts' : all_posts,
+	}
+	return HttpResponse(template.render(context,request))
+
+########### now in the template [name].html
+{% for post in all_posts %}
+<a href="/post/{{ post.id }}">{{ post.post_title }}</a>
+{% endfor %}
+
+######## if else in template
+
+{% if all_posts %}
+#do something
+{% else %}
+#do some thing else
+{% endif %}
+
+
+############## rendering template shortcut method
+
+def index(request):
+	all_posts = Post.objects.all()
+	return render(request, 'templatename',{'all_posts': all_posts})
+
+
+############### forms
+
+<form action="{% url 'appName:index' post.id %}" method=""post">
+{% csrf_token %}
+<input type="radio" name="song" />
+<input type="submit" />
+
+#### view for the form
+def index(request,post_id):
+	
+</form>
+
+
+
+
+

@@ -1,0 +1,61 @@
+////////// alert
+ ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Insert is successfull')", true);
+		or
+Response.Write("<script>alert('"+DropDownList1.Text+"')</script>");
+
+/////////////// for getting data through post or get method
+StreamReader reader = new StreamReader(HttpContext.Current.Request.InputStream);
+string requestFromPost = reader.ReadToEnd();
+
+foreach (string key in HttpContext.Current.Request.Form.AllKeys)
+{
+   string value = HttpContext.Current.Request.Form[key];
+}
+
+////////////
+
+NameValueCollection nvc = Request.Form;
+string userName, password;
+if (!string.IsNullOrEmpty(nvc["txtUserName"]))
+{
+  userName = nvc["txtUserName"];
+}
+ 
+if (!string.IsNullOrEmpty(nvc["txtPassword"]))
+{
+  password = nvc["txtPassword"];
+}
+ 
+//Process login
+CheckLogin(userName, password);
+
+
+
+////////////////// passing data b/w pages through link
+page 1: 
+http://contoso.com/products.aspx?field1=value1
+http://contoso.com/products.aspx?field1=value1&field2=value2
+
+page2/Traget page: products.aspx
+
+String s = Request.QueryString["field1"];
+
+
+//////////To find control and get the text from it
+
+if (PreviousPage != null)
+{
+    Control placeHolder =
+        PreviousPage.Controls[0].FindControl("ContentPlaceHolder1")
+    TextBox SourceTextBox = 
+
+Pro ASP.NET MVC 4 by Adam Freeman
+and steven sanderson
+t in Pro
+ASP.NET 4.5 in C#
+        (TextBox)placeHolder.FindControl("TextBox1");
+    if (SourceTextBox != null)
+    {
+        Label1.Text = SourceTextBox.Text;
+    }
+}
